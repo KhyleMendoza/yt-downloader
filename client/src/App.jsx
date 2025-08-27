@@ -8,9 +8,20 @@ export default function App() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 
+	const isValidYouTubeUrl = (url) => {
+		const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+		return youtubeRegex.test(url);
+	};
+
 	const fetchInfo = async () => {
 		setError('');
 		if (!url) return;
+		
+		if (!isValidYouTubeUrl(url)) {
+			setError('Please enter a valid YouTube URL (youtube.com or youtu.be)');
+			return;
+		}
+		
 		setLoading(true);
 		try {
 			const res = await fetch(`${API_BASE}/info?url=${encodeURIComponent(url)}`);
